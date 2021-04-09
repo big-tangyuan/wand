@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Magic Wand</title>
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body>
+    <h1>Design your own wand!</h1>
+    <img th:src="@{/images/wand.png}"/>
+    <form method="post" th:object="${design}">
+        <div class="grid">
+            <div class="ingredient-group" id="material">
+                <h3>选择材质:</h3>
+                <div th:each="ingredient : ${material}">
+                    <input name="ingredients" type="checkbox" th:value="${ingredient.id}" />
+                    <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+                </div>
+            </div>
+            <div class="ingredient-group" id="decorate">
+                <h3>设计装饰:</h3>
+                <div th:each="ingredient : ${decorate}">
+                    <input name="ingredients" type="checkbox" th:value="${ingredient.id}" />
+                    <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+                </div>
+            </div>
+            <div class="ingredient-group" id="property">
+                <h3>选择属性:</h3>
+                <div th:each="ingredient : ${property}">
+                    <input name="ingredients" type="checkbox" th:value="${ingredient.id}" />
+                    <span th:text="${ingredient.name}">INGREDIENT</span><br/>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h3>为你的创作取个名字：</h3>
+            <input type="text" th:field="*{name}">
+            <br/>
+            <button>提交你的设计表单</button>
+        </div>
+    </form>
+
+</body>
+</html>
