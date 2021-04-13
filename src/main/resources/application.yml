@@ -1,1 +1,26 @@
-
+server:
+  port: 8080
+  error:
+    path: /error
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?characterEncoding=utf8
+    username: root
+    password: iamking888
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #schema-username: root
+    #schema-password: iamking888
+    #data-username: root
+    #data-password: iamking888
+    #initialization-mode: always
+  #jpa:
+    #database-platform: org.hibernate.dialect.MySQL5Dialect
+    #hibernate:
+    #  ddl-auto: validate
+    #open-in-view: false
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto

@@ -6,12 +6,24 @@ import org.hibernate.validator.constraints.CreditCardNumber;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @Author TangZT
  */
 @Data
-public class Order {
+//@Entity
+// 表示order实体应该持久化到数据库中名为"Wand_Order"的表中
+//@Table(name = "Wand_Order")
+public class Order implements Serializable {
+    private static final long serialVersionUID = 1L;
+    //@Id
+    //@GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    private Date placedAt;
     @NotBlank(message = "姓名不能为空")
     private String name;
     @NotBlank(message = "街道不能为空")
@@ -29,4 +41,13 @@ public class Order {
     private String ccExpiration;
     @Digits(integer = 3, fraction = 0, message = "Invalid CVV")
     private String ccCVV;
+    //@ManyToMany(targetEntity = Wand.class)
+    private List<Wand> wands = new ArrayList<>();
+    public void addDesign(Wand design) {
+        this.wands.add(design);
+    }
+    //@PrePersist
+    void placedAt(){
+        this.placedAt = new Date();
+    }
 }

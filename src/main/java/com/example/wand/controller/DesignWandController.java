@@ -1,17 +1,22 @@
 package com.example.wand.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.example.wand.dao.IngredientRepository;
+import com.example.wand.mapper.IngredientMapper;
+import com.example.wand.mapper.WandMapper;
 import com.example.wand.pojo.Ingredient;
 import com.example.wand.pojo.Wand;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,11 +28,31 @@ import java.util.stream.Collectors;
 @Slf4j
 @Controller
 @RequestMapping("/design")
+@SessionAttributes("order")
+//@SessionAttributes(value = {"order","material","property"})
 public class DesignWandController {
+    /*
+    private final IngredientRepository ingredientRepo;
+    @Autowired
+    public DesignWandController(IngredientRepository ingredientRepo){
+        this.ingredientRepo = ingredientRepo;
+    }
+     */
+    @Autowired(required = false)
+    private IngredientMapper ingredientMapper;
+    private WandMapper wandMapper;
+
     @GetMapping
-    public String showWandForm(Model model){
+    public String showDesignForm(Model model){
+        //List<Ingredient> ingredients = new ArrayList<>();
+        QueryWrapper<Ingredient> queryWrapper = new QueryWrapper<>();
+        queryWrapper.select();
+        List<Ingredient> ingredients = ingredientMapper.selectList(queryWrapper);
+        //System.out.println(ingredientRepo.findAll().toString());
+        //ingredientRepo.findAll().forEach(ingredients::add);
         // 硬编码的ingredients对象列表
         //根据材质类型过滤列表
+        /*
         List<Ingredient> ingredients = Arrays.asList(
                 new Ingredient("m_gold", "黄金材质", Ingredient.Type.material),
                 new Ingredient("m_silver", "白银材质", Ingredient.Type.material),
@@ -40,6 +65,8 @@ public class DesignWandController {
                 new Ingredient("p_thunder", "雷", Ingredient.Type.property),
                 new Ingredient("p_ice", "冰", Ingredient.Type.property)
         );
+         */
+
         Ingredient.Type[] types = Ingredient.Type.values();
         // model负责在控制器与视图之间传递数据
         // 放到model属性中的数据会复制到 Servlet Response属性中， 以便被视图找到
@@ -50,6 +77,7 @@ public class DesignWandController {
         model.addAttribute("design", new Wand());
         return "design"; //design是视图的逻辑名称，用于将模型渲染到视图上
     }
+
     private List<Ingredient> filterByType(List<Ingredient> ingredients, Ingredient.Type type){
         return ingredients
                 .stream()
@@ -58,12 +86,18 @@ public class DesignWandController {
     }
 
     @PostMapping
-    public String processDesign(@Valid Wand design, Errors errors) {
+    // 将@Valid Wand design替换为@Valid @ModelAttribute("design") Wand design
+    public String processDesign(@Valid @ModelAttribute("design") Wand design, BindingResult errors) {
         if(errors.hasErrors()){
             return "design";
         }
         log.info("Processsing design:" + design);
+        saveWandInfo();
         return "redirect:/orders/current";  //重定向到相对路径
+    }
+
+    private void saveWandInfo(){
+
     }
 
 }
