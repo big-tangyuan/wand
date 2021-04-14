@@ -45,9 +45,11 @@ public class DesignWandController {
     @GetMapping
     public String showDesignForm(Model model){
         //List<Ingredient> ingredients = new ArrayList<>();
-        QueryWrapper<Ingredient> queryWrapper = new QueryWrapper<>();
-        queryWrapper.select();
-        List<Ingredient> ingredients = ingredientMapper.selectList(queryWrapper);
+        //QueryWrapper<Ingredient> queryWrapper = new QueryWrapper<>();
+        //queryWrapper.select();
+        //List<Ingredient> ingredients = ingredientMapper.selectList(queryWrapper);
+        List<Ingredient> ingredients = ingredientMapper.selectList(null);
+        //ingredients.forEach(System.out::println);
         //System.out.println(ingredientRepo.findAll().toString());
         //ingredientRepo.findAll().forEach(ingredients::add);
         // 硬编码的ingredients对象列表
